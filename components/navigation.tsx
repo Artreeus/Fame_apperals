@@ -75,7 +75,7 @@ export function Navigation() {
                   alt="Fame Group"
                   width={200}
                   height={60}
-                  className="h-8 sm:h-10 md:h-12 w-auto brightness-0 invert"
+                  className="h-8 sm:h-10 md:h-12 w-auto"
                   priority
                 />
               </div>
@@ -205,7 +205,7 @@ export function Navigation() {
                 alt="Fame Group"
                 width={150}
                 height={45}
-                className="h-8 w-auto brightness-0 invert"
+                className="h-8 w-auto"
               />
               <Button
                 variant="ghost"
