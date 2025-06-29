@@ -13,21 +13,21 @@ import {
   Lock, 
   Menu, 
   X,
-  Phone
+  Phone,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Home', href: '/' },
-  { name: 'ABOUT', href: '/about' },
-  { name: 'OUR MISSION', href: '/our-mission' },
-  { name: 'PROFILE', href: '/profile' },
-  { name: 'SERVICES', href: '/services' },
-  { name: 'OUR CLIENTS', href: '/our-clients' },
-  { name: 'PRODUCT GALLERY', href: '/product-gallery' },
-  { name: 'CONTACT', href: '/contact' },
+  { name: 'About', href: '/about' },
+  { name: 'Our Mission', href: '/our-mission' },
+  { name: 'Profile', href: '/profile' },
+  { name: 'Services', href: '/services' },
+  { name: 'Our Clients', href: '/our-clients' },
+  { name: 'Product Gallery', href: '/product-gallery' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export function Navigation() {
@@ -44,189 +44,220 @@ export function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu when clicking outside or on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  const isActiveRoute = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+    return pathname === href;
+  };
+
   return (
-    <header className={cn(
-      "fixed top-0 w-full z-50 transition-all duration-300",
-      isScrolled 
-        ? "bg-gray-800/95 backdrop-blur-sm shadow-lg" 
-        : "bg-gray-800"
-    )}>
-      {/* Top Bar */}
-      <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 py-2">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center min-h-[3rem]">
-            {/* Logo */}
-            <div className="flex items-center flex-shrink-0">
+    <>
+      <header className={cn(
+        "fixed top-0 w-full z-50 transition-all duration-300",
+        isScrolled 
+          ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200" 
+          : "bg-white shadow-sm"
+      )}>
+        {/* Top Bar */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center min-h-[3rem]">
+              {/* Logo */}
+              <div className="flex items-center flex-shrink-0">
+                <Image
+                  src="/Fame-Group-Logo-PNG.png"
+                  alt="Fame Group"
+                  width={200}
+                  height={60}
+                  className="h-8 sm:h-10 md:h-12 w-auto brightness-0 invert"
+                  priority
+                />
+              </div>
+
+              {/* Contact Info - Hidden on mobile and small tablets */}
+              <div className="hidden xl:flex items-center text-sm text-blue-100">
+                <Phone className="w-4 h-4 mr-2" />
+                <span>Give us a call on +88 01713 042644</span>
+              </div>
+
+              {/* Social Icons */}
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all duration-300 cursor-pointer hover:scale-110">
+                  <Twitter className="w-3 h-3 sm:w-4 sm:h-4" />
+                </div>
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all duration-300 cursor-pointer hover:scale-110">
+                  <Facebook className="w-3 h-3 sm:w-4 sm:h-4" />
+                </div>
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all duration-300 cursor-pointer hover:scale-110">
+                  <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Bar */}
+        <div className="bg-white border-b border-gray-100">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex h-14 sm:h-16 items-center justify-between">
+              {/* Desktop Navigation - Hidden on tablets and mobile */}
+              <nav className="hidden xl:flex items-center space-x-1">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'text-sm font-medium transition-all duration-300 px-4 py-2 rounded-lg relative group',
+                      isActiveRoute(item.href)
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    )}
+                  >
+                    {item.name}
+                    <span className={cn(
+                      "absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
+                      isActiveRoute(item.href) && "scale-x-100"
+                    )} />
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Medium Screen Navigation - Visible on large tablets */}
+              <nav className="hidden lg:flex xl:hidden items-center space-x-1 flex-1 justify-center">
+                {navigation.slice(0, 6).map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'text-xs font-medium transition-all duration-300 px-3 py-2 rounded-lg relative group',
+                      isActiveRoute(item.href)
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    )}
+                  >
+                    {item.name.length > 12 ? item.name.substring(0, 10) + '...' : item.name}
+                    <span className={cn(
+                      "absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
+                      isActiveRoute(item.href) && "scale-x-100"
+                    )} />
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Mobile Menu Button - Visible on mobile and small tablets */}
+              <div className="flex lg:hidden items-center flex-1 justify-center">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
+                >
+                  <Menu className="h-5 w-5" />
+                  <span className="ml-2 text-sm font-medium">Menu</span>
+                </Button>
+              </div>
+
+              {/* Action Icons */}
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300 group">
+                  <Mail className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                  <span className="sr-only">Email</span>
+                </button>
+                <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300 group">
+                  <Search className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                  <span className="sr-only">Search</span>
+                </button>
+                <button className="hidden sm:block p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300 group">
+                  <Globe className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                  <span className="sr-only">Language</span>
+                </button>
+                <button className="hidden sm:block p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-300 group">
+                  <Lock className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                  <span className="sr-only">Security</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          {/* Mobile Menu Panel */}
+          <div 
+            className="fixed right-0 top-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-out"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <Image
                 src="/Fame-Group-Logo-PNG.png"
                 alt="Fame Group"
-                width={200}
-                height={60}
-                className="h-8 sm:h-10 md:h-12 w-auto"
-                priority
+                width={150}
+                height={45}
+                className="h-8 w-auto"
               />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full p-2"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            
+            {/* Navigation Links */}
+            <div className="py-6">
+              {navigation.map((item, index) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={cn(
+                    'flex items-center justify-between px-6 py-4 text-base font-medium transition-all duration-200 group',
+                    isActiveRoute(item.href)
+                      ? 'text-blue-600 bg-blue-50 border-r-4 border-blue-600'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                  )}
+                >
+                  <span>{item.name}</span>
+                  <ChevronRight className={cn(
+                    "h-4 w-4 transition-all duration-200",
+                    isActiveRoute(item.href) 
+                      ? "text-blue-600 transform translate-x-1" 
+                      : "text-gray-400 group-hover:text-blue-600 group-hover:transform group-hover:translate-x-1"
+                  )} />
+                </Link>
+              ))}
             </div>
 
-            {/* Contact Info - Hidden on mobile and small tablets */}
-            <div className="hidden xl:flex items-center text-sm text-gray-600 dark:text-gray-400">
-              <Phone className="w-4 h-4 mr-2 text-blue-500" />
-              <span>Give us a call on +88 01713 042644</span>
-            </div>
-
-            {/* Social Icons */}
-            <div className="flex items-center space-x-2 flex-shrink-0">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center text-white transition-all duration-300 cursor-pointer hover:scale-110">
-                <Twitter className="w-3 h-3 sm:w-4 sm:h-4" />
-              </div>
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white transition-all duration-300 cursor-pointer hover:scale-110">
-                <Facebook className="w-3 h-3 sm:w-4 sm:h-4" />
-              </div>
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 cursor-pointer hover:scale-110">
-                <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
+            {/* Contact Info */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gray-50 border-t border-gray-100">
+              <div className="space-y-3">
+                <div className="flex items-center text-sm text-gray-600">
+                  <Phone className="w-4 h-4 mr-3 text-blue-600" />
+                  <span>+88 01713 042644</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Mail className="w-4 h-4 mr-3 text-blue-600" />
+                  <span>famefdl@gmail.com</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Navigation Bar */}
-      <div className="bg-gray-800 dark:bg-gray-900 border-t border-gray-700 dark:border-gray-600">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-12 sm:h-14 items-center justify-between">
-            {/* Desktop Navigation - Hidden on tablets and mobile */}
-            <nav className="hidden xl:flex items-center space-x-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'text-sm font-medium transition-all duration-300 hover:text-blue-400 uppercase px-3 xl:px-4 py-2 rounded-md relative group',
-                    pathname === item.href
-                      ? 'text-blue-400 bg-gray-700/50'
-                      : 'text-white hover:bg-gray-700/30'
-                  )}
-                >
-                  {item.name}
-                  <span className={cn(
-                    "absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
-                    pathname === item.href && "scale-x-100"
-                  )} />
-                </Link>
-              ))}
-            </nav>
-
-            {/* Medium Screen Navigation - Visible on large tablets */}
-            <nav className="hidden lg:flex xl:hidden items-center space-x-1 flex-1 justify-center">
-              {navigation.slice(0, 6).map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'text-xs font-medium transition-all duration-300 hover:text-blue-400 uppercase px-2 py-2 rounded-md relative group',
-                    pathname === item.href
-                      ? 'text-blue-400 bg-gray-700/50'
-                      : 'text-white hover:bg-gray-700/30'
-                  )}
-                >
-                  {item.name.length > 10 ? item.name.substring(0, 8) + '...' : item.name}
-                  <span className={cn(
-                    "absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
-                    pathname === item.href && "scale-x-100"
-                  )} />
-                </Link>
-              ))}
-            </nav>
-
-            {/* Mobile Menu Button - Visible on mobile and small tablets */}
-            <div className="flex lg:hidden items-center flex-1 justify-center">
-              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:text-blue-400 hover:bg-gray-700/50 transition-all duration-300"
-                  >
-                    <Menu className="h-5 w-5" />
-                    <span className="ml-2 text-sm font-medium">MENU</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent 
-                  side="right" 
-                  className="w-[280px] sm:w-[320px] bg-gray-800 dark:bg-gray-900 text-white border-gray-700"
-                >
-                  <div className="flex items-center justify-between mb-8">
-                    <Image
-                      src="/Fame-Group-Logo-PNG.png"
-                      alt="Fame Group"
-                      width={150}
-                      height={45}
-                      className="h-8 w-auto brightness-0 invert"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-white hover:text-blue-400"
-                    >
-                      <X className="h-5 w-5" />
-                    </Button>
-                  </div>
-                  
-                  <div className="flex flex-col space-y-2">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
-                          'text-base font-medium transition-all duration-300 hover:text-blue-400 uppercase px-4 py-3 rounded-md border-l-4 border-transparent hover:border-blue-400 hover:bg-gray-700/30',
-                          pathname === item.href
-                            ? 'text-blue-400 border-blue-400 bg-gray-700/50'
-                            : 'text-white'
-                        )}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-
-                  {/* Mobile Contact Info */}
-                  <div className="mt-8 pt-8 border-t border-gray-700">
-                    <div className="flex items-center text-sm text-gray-400 mb-4">
-                      <Phone className="w-4 h-4 mr-2 text-blue-400" />
-                      <span>+88 01713 042644</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-400">
-                      <Mail className="w-4 h-4 mr-2 text-blue-400" />
-                      <span>famefdl@gmail.com</span>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-
-            {/* Action Icons */}
-            <div className="flex items-center space-x-2 sm:space-x-3 text-white">
-              <button className="p-1.5 sm:p-2 hover:text-blue-400 hover:bg-gray-700/50 rounded-md transition-all duration-300 group">
-                <Mail className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                <span className="sr-only">Email</span>
-              </button>
-              <button className="p-1.5 sm:p-2 hover:text-blue-400 hover:bg-gray-700/50 rounded-md transition-all duration-300 group">
-                <Search className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                <span className="sr-only">Search</span>
-              </button>
-              <button className="hidden sm:block p-1.5 sm:p-2 hover:text-blue-400 hover:bg-gray-700/50 rounded-md transition-all duration-300 group">
-                <Globe className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                <span className="sr-only">Language</span>
-              </button>
-              <button className="hidden sm:block p-1.5 sm:p-2 hover:text-blue-400 hover:bg-gray-700/50 rounded-md transition-all duration-300 group">
-                <Lock className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                <span className="sr-only">Security</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+      )}
+    </>
   );
 }
